@@ -40,15 +40,15 @@ def hero_info(request, id=0) :
     except (Hero.DoesNotExist) as e :
       return HttpResponseBadRequest()
     
-    response_dict = {'id': hero.id, 'name': hero.name, 'age': hero.age}
+    response_dict = {'id': hero.id, 'name': hero.name, 'age': str(hero.age)}
     return JsonResponse(response_dict)
   
   elif request.method == 'PUT' :
     try :
       body = request.body.decode()
       new_name = json.loads(body)['name']
-      new_age = json.loads(body)['age']
-    except (KeyError, JSONDecodeError) as e :
+      new_age = int(json.loads(body)['age'])
+    except (KeyError, ValueError, JSONDecodeError) as e :
       return HttpResponseBadRequest()
     
     try :
@@ -59,7 +59,7 @@ def hero_info(request, id=0) :
     hero.name = new_name
     hero.age = new_age
     hero.save()
-    response_dict = {'id': hero.id, 'name': hero.name, 'age': hero.age}
+    response_dict = {'id': hero.id, 'name': hero.name, 'age': str(hero.age)}
     return JsonResponse(response_dict, status=201)
   
   else :
