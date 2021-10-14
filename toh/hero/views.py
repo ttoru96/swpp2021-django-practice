@@ -38,12 +38,12 @@ def hero_name(request, name):
 def hero_info(request, id):
     if request.method=="GET":
         hero = Hero.objects.get(id=id)
-        response_dict = {"id" : hero.id, "name" : hero.name, "age" : hero.age}
+        response_dict = {"id" : hero.id, "name" : hero.name, "age" : str(hero.age)}
         return JsonResponse(response_dict, safe=False)
 
     elif request.method=="PUT":
         hero = Hero.objects.get(id=id)
-        
+
         try:
             body = request.body.decode()
             hero_name = json.loads(body)["name"]
@@ -55,7 +55,7 @@ def hero_info(request, id):
         hero.age = hero_age
         hero.save()
 
-        response_dict = {'id' : hero.id, 'name':hero.name, 'age':hero.age}
+        response_dict = {'id' : hero.id, 'name':hero.name, 'age':str(hero.age)}
         return JsonResponse(response_dict)
 
     else:
