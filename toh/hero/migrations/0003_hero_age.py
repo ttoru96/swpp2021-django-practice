@@ -11,6 +11,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='hero',
             name='age',
-            field=models.IntegerField(blank=True, null=True),
+            field=models.IntegerField(defalut=25),
         ),
     ]
