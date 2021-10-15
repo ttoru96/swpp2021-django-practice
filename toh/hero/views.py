@@ -1,7 +1,7 @@
 import json
 from json import JSONDecodeError
 
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Hero
@@ -24,3 +24,11 @@ def hero_list(request):
         return JsonResponse(response_dict, status=201)
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])
+
+
+def hero_id(request, id):
+    return HttpResponse(f'Your name is {id}!')
+
+
+def hero_name(request, name):
+    return HttpResponse(f'Your name is {name}!')
