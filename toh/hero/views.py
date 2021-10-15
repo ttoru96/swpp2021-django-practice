@@ -33,3 +33,26 @@ def hero_id(request, id):
 
 def hero_name(request, name):
     return HttpResponse(f'Your name is {name}!')
+
+
+@csrf_exempt
+def hero_info(request, id):
+    if request.method == 'GET':
+        hero = Hero.objects.get(id=id)
+        response_dict = {'id': hero.id, 'name': hero.name, 'age': hero.age}
+        return JsonResponse(response_dict)
+    elif request.method == 'PUT':
+        try:
+            body = request.body.decode()
+            hero_name = json.loads(body)['name']
+            hero_age = json.loads(body)['age']
+        except (KeyError, JSONDecodeError) as e:
+            return HttpResponseBadRequest()
+        hero = Hero.objects.get(id=id)
+        hero.name = hero_name
+        hero.age = hero_age
+        hero.save()
+        response_dict = {'id': hero.id, 'name': hero.name, 'age': hero.age}
+        return JsonResponse(response_dict)
+    else:
+        return HttpResponseNotAllowed(['GET', 'PUT'])
