@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def hero_list(request):
     if request.method == "GET":
-        hero_all_list = [hero for hero in Hero.objects.all().values()]
+        hero_all_list = [{"id": hero.id, "name":hero.name, "age": str(hero.age)} for hero in Hero.objects.all()]
         return JsonResponse(hero_all_list, safe = False)
 
     elif request.method == "POST":
@@ -35,7 +35,7 @@ def hero_info(request, id):
     hero = Hero.objects.get(id=id)
     if request.method =="GET":
         hero = Hero.objects.get(id=id)
-        response_dict = {"id": hero.id, "name": hero.name, "age": hero.age}
+        response_dict = {"id": hero.id, "name": hero.name, "age": str(hero.age)}
         return JsonResponse(response_dict, safe=False)
     elif request.method =="PUT":
         try:
