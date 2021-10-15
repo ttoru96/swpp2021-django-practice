@@ -17,19 +17,19 @@ from .models import Hero
 @csrf_exempt
 def hero_list(request):
     if request.method == "GET":
-        hero_all_list = [hero for hero in Hero.objects.all().values()]
+        hero_all_list = [hero.to_dict() for hero in Hero.objects.all().iterator()]
         return JsonResponse(hero_all_list, safe=False)
     elif request.method == "POST":
         try:
             body = request.body.decode()
             body = json.loads(body)
             hero_name = body["name"]
-            hero_age = body["age"]
-        except (KeyError, JSONDecodeError):
+            hero_age = int(body["age"])
+        except (KeyError, ValueError, JSONDecodeError):
             return HttpResponseBadRequest()
         hero = Hero(name=hero_name, age=hero_age)
         hero.save()
-        response_dict = {"id": hero.id, "name": hero.name, "age": hero.age}
+        response_dict = hero.to_dict()
         return JsonResponse(response_dict, status=201)
     else:
         return HttpResponseNotAllowed(["GET", "POST"])
@@ -52,8 +52,8 @@ def hero_info(request, id_: int):
             body = request.body.decode()
             body = json.loads(body)
             hero_name = body["name"]
-            hero_age = body["age"]
-        except (KeyError, JSONDecodeError):
+            hero_age = int(body["age"])
+        except (KeyError, ValueError, JSONDecodeError):
             return HttpResponseBadRequest()
         hero.name = hero_name
         hero.age = hero_age

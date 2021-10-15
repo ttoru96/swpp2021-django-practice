@@ -10,7 +10,7 @@ class Hero(models.Model):
         return str(self.name)
 
     def to_dict(self) -> dict:
-        return {"id": self.id, "name": self.name, "age": self.age}
+        return {"id": self.id, "name": self.name, "age": str(self.age)}
     
     def introduce(self) -> str:
         return f"Hello, my name is {self.name} and my score is {self.score}!"
