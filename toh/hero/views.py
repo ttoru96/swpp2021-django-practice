@@ -38,7 +38,7 @@ def hero_info(request, id):
 @csrf_exempt
 def hero_list(request):
     if request.method == 'GET':
-        hero_all_lsit = [hero for hero in Hero.objects.all().values()]
+        hero_all_lsit = [{'id': hero.id, 'name': hero.name, 'age':str(hero.age)} for hero in Hero.objects.all().values()]
         return JsonResponse(hero_all_lsit, safe= False)
     elif request.method == 'POST':
         try:
