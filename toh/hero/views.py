@@ -16,11 +16,12 @@ def hero_list(request):
         try:
             body = request.body.decode()
             hero_name = json.loads(body)['name']
+            hero_age = json.loads(body)['age']
         except (KeyError, JSONDecodeError) as e:
             return HttpResponseBadRequest()
-        hero = Hero(name=hero_name)
+        hero = Hero(name=hero_name, age=hero_age)
         hero.save()
-        response_dict = {'id': hero.id, 'name': hero.name}
+        response_dict = {'id': hero.id, 'name': hero.name, 'age': hero.age}
         return JsonResponse(response_dict, status=201)
     else:
         return HttpResponseNotAllowed(['GET', 'POST'])
